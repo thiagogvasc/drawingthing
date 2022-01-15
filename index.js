@@ -1,38 +1,13 @@
-const canvas = document.getElementById('canvas')
-const ctx = canvas.getContext('2d')
+const express = require('express')
+const app = express()
+const path = require('path')
 
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
+app.use(express.static(path.join(__dirname, '/client')));
 
-let isDrawing = false
-let cursorX = 0
-let cursorY = 0
+const PORT = process.env.PORT || 8080
 
-window.addEventListener('mousemove', e => {
-    cursorX = e.clientX
-    cursorY = e.clientY
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/client/index.html')
 })
 
-window.addEventListener('mousedown', e => {
-    isDrawing = true
-})
-
-window.addEventListener('mouseup', e => {
-    isDrawing = false
-})
-
-
-const render = () => {
-    requestAnimationFrame(render)
-    //ctx.clearRect(0, 0, canvas.width, canvas, height)
-
-    if (isDrawing) {
-        ctx.beginPath();
-        ctx.arc(cursorX, cursorY, 10, 0, Math.PI*2);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-    }
-}
-
-render()
+app.listen(PORT)
